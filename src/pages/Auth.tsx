@@ -1,108 +1,78 @@
 import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Sprout } from "lucide-react";
-import { z } from "zod";
-
-const authSchema = z.object({
-  email: z.string().email("Invalid email address").max(255),
-  password: z.string().min(6, "Password must be at least 6 characters").max(100),
-  fullName: z.string().min(2, "Name must be at least 2 characters").max(100).optional(),
-});
+import { Sprout, User, Tractor } from "lucide-react";
 
 const Auth = () => {
-  const [searchParams] = useSearchParams();
-  const initialMode = searchParams.get("mode") === "signup" ? "signup" : "login";
-  const [mode, setMode] = useState<"login" | "signup">(initialMode);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [role, setRole] = useState<"farmer" | "consumer">("consumer");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleAuth = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleDemoLogin = async (role: "farmer" | "consumer") => {
     setLoading(true);
 
     try {
-      if (mode === "signup") {
-        const validation = authSchema.parse({ email, password, fullName });
-        
-        const { data: authData, error: signUpError } = await supabase.auth.signUp({
-          email: validation.email,
-          password: validation.password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/`,
-            data: {
-              full_name: validation.fullName,
-              role: role,
-            }
-          }
-        });
+      const timestamp = Date.now();
+      const email = `demo-${role}-${timestamp}@agriconnect.demo`;
+      const password = "demo123456";
+      const fullName = role === "farmer" ? "Demo Farmer" : "Demo Consumer";
 
-        if (signUpError) throw signUpError;
-
-        if (authData.user) {
-          const { error: profileError } = await supabase
-            .from("profiles")
-            .insert({
-              id: authData.user.id,
-              email: validation.email,
-              full_name: validation.fullName || "",
-              role: role,
-            });
-
-          if (profileError) throw profileError;
-
-          if (role === "farmer") {
-            const { error: farmerError } = await supabase
-              .from("farmer_details")
-              .insert({
-                farmer_id: authData.user.id,
-                farm_name: "My Farm",
-                farm_address: "Update your farm address",
-              });
-
-            if (farmerError) throw farmerError;
-          } else {
-            const { error: consumerError } = await supabase
-              .from("consumer_details")
-              .insert({
-                consumer_id: authData.user.id,
-              });
-
-            if (consumerError) throw consumerError;
+      const { data: authData, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/`,
+          data: {
+            full_name: fullName,
+            role: role,
           }
         }
+      });
 
-        toast({
-          title: "Account created!",
-          description: "Welcome to AgriConnect",
-        });
-        navigate("/");
-      } else {
-        const validation = authSchema.parse({ email, password });
-        
-        const { error } = await supabase.auth.signInWithPassword({
-          email: validation.email,
-          password: validation.password,
-        });
+      if (signUpError) throw signUpError;
 
-        if (error) throw error;
+      if (authData.user) {
+        const { error: profileError } = await supabase
+          .from("profiles")
+          .insert({
+            id: authData.user.id,
+            email,
+            full_name: fullName,
+            role: role,
+          });
 
-        toast({
-          title: "Welcome back!",
-        });
-        navigate("/");
+        if (profileError) throw profileError;
+
+        if (role === "farmer") {
+          const { error: farmerError } = await supabase
+            .from("farmer_details")
+            .insert({
+              farmer_id: authData.user.id,
+              farm_name: "Demo Farm",
+              farm_address: "123 Farm Road, Green Valley",
+              farm_description: "Organic produce from our sustainable farm",
+            });
+
+          if (farmerError) throw farmerError;
+        } else {
+          const { error: consumerError } = await supabase
+            .from("consumer_details")
+            .insert({
+              consumer_id: authData.user.id,
+            });
+
+          if (consumerError) throw consumerError;
+        }
       }
+
+      toast({
+        title: "Welcome to AgriConnect!",
+        description: `Logged in as demo ${role}`,
+      });
+      navigate("/");
     } catch (error: any) {
       toast({
         title: "Error",
@@ -116,96 +86,50 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-accent/5 p-4">
-      <Card className="w-full max-w-md shadow-elevated">
+      <Card className="w-full max-w-2xl shadow-elevated">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="h-16 w-16 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
-              <Sprout className="h-8 w-8 text-primary-foreground" />
+            <div className="h-20 w-20 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
+              <Sprout className="h-10 w-10 text-primary-foreground" />
             </div>
           </div>
-          <CardTitle className="text-2xl">
-            {mode === "login" ? "Welcome Back" : "Join AgriConnect"}
-          </CardTitle>
-          <CardDescription>
-            {mode === "login" 
-              ? "Sign in to access your account" 
-              : "Connect farmers with consumers"}
+          <CardTitle className="text-3xl">Welcome to AgriConnect</CardTitle>
+          <CardDescription className="text-lg">
+            Choose your role to explore the demo
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs value={mode} onValueChange={(v) => setMode(v as "login" | "signup")}>
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
-            </TabsList>
-            
-            <form onSubmit={handleAuth} className="space-y-4 mt-4">
-              {mode === "signup" && (
-                <>
-                  <div className="space-y-2">
-                    <Label htmlFor="fullName">Full Name</Label>
-                    <Input
-                      id="fullName"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      required
-                      maxLength={100}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>I am a</Label>
-                    <div className="grid grid-cols-2 gap-3">
-                      <Button
-                        type="button"
-                        variant={role === "consumer" ? "default" : "outline"}
-                        onClick={() => setRole("consumer")}
-                        className="w-full"
-                      >
-                        Consumer
-                      </Button>
-                      <Button
-                        type="button"
-                        variant={role === "farmer" ? "default" : "outline"}
-                        onClick={() => setRole("farmer")}
-                        className="w-full"
-                      >
-                        Farmer
-                      </Button>
-                    </div>
-                  </div>
-                </>
-              )}
-              
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  maxLength={255}
-                />
+          <div className="grid md:grid-cols-2 gap-6">
+            <Button
+              onClick={() => handleDemoLogin("consumer")}
+              disabled={loading}
+              className="h-auto py-8 flex flex-col items-center gap-4 text-lg"
+              variant="outline"
+            >
+              <User className="h-12 w-12" />
+              <div>
+                <div className="font-semibold">Continue as Consumer</div>
+                <div className="text-sm text-muted-foreground font-normal">
+                  Browse and order fresh produce
+                </div>
               </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  minLength={6}
-                  maxLength={100}
-                />
-              </div>
+            </Button>
 
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Loading..." : mode === "login" ? "Sign In" : "Create Account"}
-              </Button>
-            </form>
-          </Tabs>
+            <Button
+              onClick={() => handleDemoLogin("farmer")}
+              disabled={loading}
+              className="h-auto py-8 flex flex-col items-center gap-4 text-lg"
+              variant="outline"
+            >
+              <Tractor className="h-12 w-12" />
+              <div>
+                <div className="font-semibold">Continue as Farmer</div>
+                <div className="text-sm text-muted-foreground font-normal">
+                  Manage your farm and products
+                </div>
+              </div>
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>
