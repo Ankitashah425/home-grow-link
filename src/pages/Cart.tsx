@@ -93,7 +93,9 @@ const Cart = () => {
                     <span>₹{(totalPrice + 50).toFixed(2)}</span>
                   </div>
                 </div>
-                <Button className="w-full mb-3" size="lg">Proceed to Checkout</Button>
+                <Button className="w-full mb-3" size="lg" onClick={() => navigate("/checkout")}>
+                  Proceed to Checkout
+                </Button>
                 <Button variant="outline" className="w-full" onClick={clearCart}>Clear Cart</Button>
               </Card>
             </div>

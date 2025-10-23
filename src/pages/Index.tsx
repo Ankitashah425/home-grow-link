@@ -33,7 +33,7 @@ const Index = () => {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <Link to="/auth?mode=signup">
+              <Link to="/auth">
                 <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm border-white text-white hover:bg-white/20">
                   Join as Farmer
                 </Button>
@@ -128,24 +128,24 @@ const Index = () => {
             <div>
               <h4 className="font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2 text-sm">
-                <li><Link to="/marketplace" className="text-muted-foreground hover:text-primary">Marketplace</Link></li>
-                <li><Link to="/farmers" className="text-muted-foreground hover:text-primary">Our Farmers</Link></li>
-                <li><Link to="/how-it-works" className="text-muted-foreground hover:text-primary">How It Works</Link></li>
+                <li><Link to="/marketplace" className="text-muted-foreground hover:text-primary transition-colors">Marketplace</Link></li>
+                <li><Link to="/auth" className="text-muted-foreground hover:text-primary transition-colors">Join Now</Link></li>
+                <li><Link to="/" className="text-muted-foreground hover:text-primary transition-colors">About Us</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="text-muted-foreground hover:text-primary">Help Center</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-primary">Contact Us</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-primary">FAQs</a></li>
+                <li><Link to="/" className="text-muted-foreground hover:text-primary transition-colors">Help Center</Link></li>
+                <li><Link to="/" className="text-muted-foreground hover:text-primary transition-colors">Contact Us</Link></li>
+                <li><Link to="/" className="text-muted-foreground hover:text-primary transition-colors">FAQs</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Legal</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="text-muted-foreground hover:text-primary">Privacy Policy</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-primary">Terms of Service</a></li>
+                <li><Link to="/" className="text-muted-foreground hover:text-primary transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/" className="text-muted-foreground hover:text-primary transition-colors">Terms of Service</Link></li>
               </ul>
             </div>
           </div>

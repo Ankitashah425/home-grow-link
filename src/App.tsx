@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Marketplace from "./pages/Marketplace";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 import FarmerDashboard from "./pages/FarmerDashboard";
 import ConsumerDashboard from "./pages/ConsumerDashboard";
 import NotFound from "./pages/NotFound";
@@ -28,6 +29,7 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/marketplace" element={<Marketplace />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
               <Route path="/farmer-dashboard" element={<FarmerDashboard />} />
               <Route path="/consumer-dashboard" element={<ConsumerDashboard />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

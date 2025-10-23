@@ -72,7 +72,13 @@ const Auth = () => {
         title: "Welcome to AgriConnect!",
         description: `Logged in as demo ${role}`,
       });
-      navigate("/");
+      
+      // Redirect to appropriate dashboard based on role
+      if (role === "farmer") {
+        navigate("/farmer-dashboard");
+      } else {
+        navigate("/consumer-dashboard");
+      }
     } catch (error: any) {
       toast({
         title: "Error",

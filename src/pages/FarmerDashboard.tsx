@@ -5,11 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Package } from "lucide-react";
 
 interface Product {
   id: string;
@@ -24,10 +26,28 @@ interface Product {
   is_active: boolean;
 }
 
+interface OrderItem {
+  id: string;
+  order_id: string;
+  product_id: string;
+  quantity: number;
+  price_per_unit: number;
+  subtotal: number;
+  products: {
+    name: string;
+  };
+  orders: {
+    created_at: string;
+    status: string;
+    delivery_address: string;
+  };
+}
+
 const FarmerDashboard = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [products, setProducts] = useState<Product[]>([]);
+  const [orders, setOrders] = useState<OrderItem[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [formData, setFormData] = useState({
@@ -56,8 +76,33 @@ const FarmerDashboard = () => {
     }
   };
 
+  const fetchOrders = async () => {
+    if (!user) return;
+    const { data, error } = await supabase
+      .from("order_items")
+      .select(`
+        id,
+        order_id,
+        product_id,
+        quantity,
+        price_per_unit,
+        subtotal,
+        products(name),
+        orders(created_at, status, delivery_address)
+      `)
+      .eq("farmer_id", user.id)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error loading orders:", error);
+    } else {
+      setOrders(data || []);
+    }
+  };
+
   useEffect(() => {
     fetchProducts();
+    fetchOrders();
   }, [user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -140,13 +185,22 @@ const FarmerDashboard = () => {
       <Navbar />
       <div className="min-h-screen bg-gradient-subtle pt-20">
         <div className="container mx-auto px-4 py-12">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-4xl font-bold">My Products</h1>
-            <Button onClick={() => { setShowForm(!showForm); setEditingProduct(null); }}>
-              <Plus className="h-5 w-5 mr-2" />
-              Add Product
-            </Button>
-          </div>
+          <h1 className="text-4xl font-bold mb-8">Farmer Dashboard</h1>
+
+          <Tabs defaultValue="products" className="w-full">
+            <TabsList className="grid w-full max-w-md grid-cols-2 mb-8">
+              <TabsTrigger value="products">My Products</TabsTrigger>
+              <TabsTrigger value="orders">Orders</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="products">
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-2xl font-semibold">Product Management</h2>
+                <Button onClick={() => { setShowForm(!showForm); setEditingProduct(null); }}>
+                  <Plus className="h-5 w-5 mr-2" />
+                  Add Product
+                </Button>
+              </div>
 
           {showForm && (
             <Card className="p-6 mb-8">
@@ -271,6 +325,53 @@ const FarmerDashboard = () => {
               </Card>
             ))}
           </div>
+        </TabsContent>
+
+        <TabsContent value="orders">
+          <h2 className="text-2xl font-semibold mb-6">Incoming Orders</h2>
+          {orders.length === 0 ? (
+            <Card className="p-12 text-center">
+              <Package className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-muted-foreground">
+                No orders yet. Orders for your products will appear here.
+              </p>
+            </Card>
+          ) : (
+            <div className="space-y-4">
+              {orders.map((item) => (
+                <Card key={item.id} className="p-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <div className="flex items-center gap-3 mb-2">
+                        <Badge className={
+                          item.orders.status === "pending" ? "bg-yellow-500/10 text-yellow-500" :
+                          item.orders.status === "confirmed" ? "bg-blue-500/10 text-blue-500" :
+                          item.orders.status === "delivered" ? "bg-green-500/10 text-green-500" :
+                          "bg-gray-500/10 text-gray-500"
+                        }>
+                          {item.orders.status.toUpperCase()}
+                        </Badge>
+                        <span className="text-sm text-muted-foreground">
+                          {new Date(item.orders.created_at).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <h3 className="font-semibold text-lg mb-1">{item.products.name}</h3>
+                      <p className="text-sm text-muted-foreground">Quantity: {item.quantity}</p>
+                      <p className="text-sm text-muted-foreground">{item.orders.delivery_address}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-lg">₹{item.subtotal.toFixed(2)}</p>
+                      <p className="text-sm text-muted-foreground">
+                        ₹{item.price_per_unit} per unit
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
         </div>
       </div>
     </>
