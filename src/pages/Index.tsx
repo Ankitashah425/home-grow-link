@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/Navbar";
 import { ArrowRight, Leaf, TruckIcon, ShieldCheck, Star } from "lucide-react";
-import heroImage from "@/assets/hero-farm-fresh.jpg";
+import heroImage from "@/assets/bg-farm-field.jpg";
 
 const Index = () => {
   return (

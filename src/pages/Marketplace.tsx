@@ -6,6 +6,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { Navbar } from "@/components/Navbar";
 import { Search, Filter } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import heroMarketplace from "@/assets/hero-marketplace.jpg";
 
 interface Product {
   id: string;
@@ -73,11 +74,19 @@ const Marketplace = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">Fresh Marketplace</h1>
-          <p className="text-muted-foreground">Discover farm-fresh produce from local farmers</p>
+      <div 
+        className="relative h-[400px] bg-cover bg-center mb-8"
+        style={{ backgroundImage: `url(${heroMarketplace})` }}
+      >
+        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+          <div className="text-center text-white">
+            <h1 className="text-5xl font-bold mb-4">Fresh Marketplace</h1>
+            <p className="text-xl">Discover farm-fresh produce from local farmers</p>
+          </div>
         </div>
+      </div>
+      
+      <div className="container mx-auto px-4 py-8">
 
         <div className="flex flex-col md:flex-row gap-4 mb-8">
           <div className="flex-1 relative">
