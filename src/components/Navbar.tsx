@@ -4,7 +4,7 @@ import { ShoppingCart, Sprout, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 export const Navbar = () => {
-  const { user, profile } = useAuth();
+  const { user, userRole } = useAuth();
 
   return (
     <nav className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-50">
@@ -37,7 +37,7 @@ export const Navbar = () => {
                   <ShoppingCart className="h-5 w-5" />
                 </Button>
               </Link>
-              <Link to={profile?.role === "farmer" ? "/farmer-dashboard" : "/consumer-dashboard"}>
+              <Link to={userRole === "farmer" ? "/farmer-dashboard" : "/consumer-dashboard"}>
                 <Button variant="ghost" size="icon">
                   <User className="h-5 w-5" />
                 </Button>

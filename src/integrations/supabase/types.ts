@@ -18,93 +18,38 @@ export type Database = {
         Row: {
           city: string | null
           consumer_id: string
-          created_at: string
+          created_at: string | null
           delivery_address: string | null
           id: string
           postal_code: string | null
           preferences: string | null
-          updated_at: string
+          updated_at: string | null
         }
         Insert: {
           city?: string | null
           consumer_id: string
-          created_at?: string
+          created_at?: string | null
           delivery_address?: string | null
           id?: string
           postal_code?: string | null
           preferences?: string | null
-          updated_at?: string
+          updated_at?: string | null
         }
         Update: {
           city?: string | null
           consumer_id?: string
-          created_at?: string
+          created_at?: string | null
           delivery_address?: string | null
           id?: string
           postal_code?: string | null
           preferences?: string | null
-          updated_at?: string
+          updated_at?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "consumer_details_consumer_id_fkey"
-            columns: ["consumer_id"]
-            isOneToOne: true
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      delivery_tracking: {
-        Row: {
-          actual_delivery: string | null
-          created_at: string
-          delivery_partner_name: string | null
-          delivery_partner_phone: string | null
-          estimated_delivery: string | null
-          id: string
-          notes: string | null
-          order_id: string
-          status: Database["public"]["Enums"]["delivery_status"]
-          updated_at: string
-        }
-        Insert: {
-          actual_delivery?: string | null
-          created_at?: string
-          delivery_partner_name?: string | null
-          delivery_partner_phone?: string | null
-          estimated_delivery?: string | null
-          id?: string
-          notes?: string | null
-          order_id: string
-          status?: Database["public"]["Enums"]["delivery_status"]
-          updated_at?: string
-        }
-        Update: {
-          actual_delivery?: string | null
-          created_at?: string
-          delivery_partner_name?: string | null
-          delivery_partner_phone?: string | null
-          estimated_delivery?: string | null
-          id?: string
-          notes?: string | null
-          order_id?: string
-          status?: Database["public"]["Enums"]["delivery_status"]
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "delivery_tracking_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: true
-            referencedRelation: "orders"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       farmer_details: {
         Row: {
-          created_at: string
+          created_at: string | null
           farm_address: string
           farm_description: string | null
           farm_name: string
@@ -114,10 +59,10 @@ export type Database = {
           organic_certified: boolean | null
           rating: number | null
           total_ratings: number | null
-          updated_at: string
+          updated_at: string | null
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           farm_address: string
           farm_description?: string | null
           farm_name: string
@@ -127,10 +72,10 @@ export type Database = {
           organic_certified?: boolean | null
           rating?: number | null
           total_ratings?: number | null
-          updated_at?: string
+          updated_at?: string | null
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           farm_address?: string
           farm_description?: string | null
           farm_name?: string
@@ -140,21 +85,13 @@ export type Database = {
           organic_certified?: boolean | null
           rating?: number | null
           total_ratings?: number | null
-          updated_at?: string
+          updated_at?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "farmer_details_farmer_id_fkey"
-            columns: ["farmer_id"]
-            isOneToOne: true
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       order_items: {
         Row: {
-          created_at: string
+          created_at: string | null
           farmer_id: string
           id: string
           order_id: string
@@ -164,7 +101,7 @@ export type Database = {
           subtotal: number
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           farmer_id: string
           id?: string
           order_id: string
@@ -174,7 +111,7 @@ export type Database = {
           subtotal: number
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           farmer_id?: string
           id?: string
           order_id?: string
@@ -184,13 +121,6 @@ export type Database = {
           subtotal?: number
         }
         Relationships: [
-          {
-            foreignKeyName: "order_items_farmer_id_fkey"
-            columns: ["farmer_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "order_items_order_id_fkey"
             columns: ["order_id"]
@@ -210,7 +140,7 @@ export type Database = {
       orders: {
         Row: {
           consumer_id: string
-          created_at: string
+          created_at: string | null
           delivery_address: string
           delivery_city: string
           delivery_postal_code: string
@@ -218,11 +148,11 @@ export type Database = {
           notes: string | null
           status: Database["public"]["Enums"]["order_status"]
           total_amount: number
-          updated_at: string
+          updated_at: string | null
         }
         Insert: {
           consumer_id: string
-          created_at?: string
+          created_at?: string | null
           delivery_address: string
           delivery_city: string
           delivery_postal_code: string
@@ -230,11 +160,11 @@ export type Database = {
           notes?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           total_amount: number
-          updated_at?: string
+          updated_at?: string | null
         }
         Update: {
           consumer_id?: string
-          created_at?: string
+          created_at?: string | null
           delivery_address?: string
           delivery_city?: string
           delivery_postal_code?: string
@@ -242,22 +172,14 @@ export type Database = {
           notes?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           total_amount?: number
-          updated_at?: string
+          updated_at?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "orders_consumer_id_fkey"
-            columns: ["consumer_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       products: {
         Row: {
           category: string
-          created_at: string
+          created_at: string | null
           description: string | null
           farmer_id: string
           freshness_date: string | null
@@ -267,13 +189,13 @@ export type Database = {
           name: string
           organic: boolean | null
           price: number
-          quantity_available: number
+          quantity_available: number | null
           unit: string
-          updated_at: string
+          updated_at: string | null
         }
         Insert: {
           category: string
-          created_at?: string
+          created_at?: string | null
           description?: string | null
           farmer_id: string
           freshness_date?: string | null
@@ -283,13 +205,13 @@ export type Database = {
           name: string
           organic?: boolean | null
           price: number
-          quantity_available?: number
+          quantity_available?: number | null
           unit?: string
-          updated_at?: string
+          updated_at?: string | null
         }
         Update: {
           category?: string
-          created_at?: string
+          created_at?: string | null
           description?: string | null
           farmer_id?: string
           freshness_date?: string | null
@@ -299,57 +221,46 @@ export type Database = {
           name?: string
           organic?: boolean | null
           price?: number
-          quantity_available?: number
+          quantity_available?: number | null
           unit?: string
-          updated_at?: string
+          updated_at?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "products_farmer_id_fkey"
-            columns: ["farmer_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       profiles: {
         Row: {
           avatar_url: string | null
-          created_at: string
+          created_at: string | null
           email: string
-          full_name: string
+          full_name: string | null
           id: string
           phone: string | null
-          role: Database["public"]["Enums"]["user_role"]
-          updated_at: string
+          updated_at: string | null
         }
         Insert: {
           avatar_url?: string | null
-          created_at?: string
+          created_at?: string | null
           email: string
-          full_name: string
+          full_name?: string | null
           id: string
           phone?: string | null
-          role?: Database["public"]["Enums"]["user_role"]
-          updated_at?: string
+          updated_at?: string | null
         }
         Update: {
           avatar_url?: string | null
-          created_at?: string
+          created_at?: string | null
           email?: string
-          full_name?: string
+          full_name?: string | null
           id?: string
           phone?: string | null
-          role?: Database["public"]["Enums"]["user_role"]
-          updated_at?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
       ratings: {
         Row: {
           consumer_id: string
-          created_at: string
+          created_at: string | null
           delivery_rating: number | null
           farmer_id: string
           id: string
@@ -359,7 +270,7 @@ export type Database = {
         }
         Insert: {
           consumer_id: string
-          created_at?: string
+          created_at?: string | null
           delivery_rating?: number | null
           farmer_id: string
           id?: string
@@ -369,7 +280,7 @@ export type Database = {
         }
         Update: {
           consumer_id?: string
-          created_at?: string
+          created_at?: string | null
           delivery_rating?: number | null
           farmer_id?: string
           id?: string
@@ -379,20 +290,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "ratings_consumer_id_fkey"
-            columns: ["consumer_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "ratings_farmer_id_fkey"
-            columns: ["farmer_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "ratings_order_id_fkey"
             columns: ["order_id"]
             isOneToOne: false
@@ -401,15 +298,42 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      delivery_status: "assigned" | "picked_up" | "in_transit" | "delivered"
+      app_role: "farmer" | "consumer" | "admin"
       order_status:
         | "pending"
         | "confirmed"
@@ -417,7 +341,6 @@ export type Database = {
         | "out_for_delivery"
         | "delivered"
         | "cancelled"
-      user_role: "farmer" | "consumer" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -545,7 +468,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      delivery_status: ["assigned", "picked_up", "in_transit", "delivered"],
+      app_role: ["farmer", "consumer", "admin"],
       order_status: [
         "pending",
         "confirmed",
@@ -554,7 +477,6 @@ export const Constants = {
         "delivered",
         "cancelled",
       ],
-      user_role: ["farmer", "consumer", "admin"],
     },
   },
 } as const
