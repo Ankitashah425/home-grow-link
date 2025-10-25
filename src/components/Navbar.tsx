@@ -1,10 +1,16 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Sprout, User } from "lucide-react";
+import { ShoppingCart, Sprout, User, LogOut } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export const Navbar = () => {
-  const { user, userRole } = useAuth();
+  const { user, userRole, signOut, profile } = useAuth();
 
   return (
     <nav className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-50">
@@ -37,11 +43,28 @@ export const Navbar = () => {
                   <ShoppingCart className="h-5 w-5" />
                 </Button>
               </Link>
-              <Link to={userRole === "farmer" ? "/farmer-dashboard" : "/consumer-dashboard"}>
-                <Button variant="ghost" size="icon">
-                  <User className="h-5 w-5" />
-                </Button>
-              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <User className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <div className="px-2 py-1.5 text-sm font-medium">
+                    {profile?.full_name || "User"}
+                  </div>
+                  <Link to={userRole === "farmer" ? "/farmer-dashboard" : "/consumer-dashboard"}>
+                    <DropdownMenuItem>
+                      <User className="mr-2 h-4 w-4" />
+                      Dashboard
+                    </DropdownMenuItem>
+                  </Link>
+                  <DropdownMenuItem onClick={signOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </>
           ) : (
             <>

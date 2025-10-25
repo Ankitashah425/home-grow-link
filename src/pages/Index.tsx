@@ -33,7 +33,12 @@ const Index = () => {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <Link to="/auth">
+              <Link to="/join/consumer">
+                <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm border-white text-white hover:bg-white/20">
+                  Join as Consumer
+                </Button>
+              </Link>
+              <Link to="/join/farmer">
                 <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm border-white text-white hover:bg-white/20">
                   Join as Farmer
                 </Button>
