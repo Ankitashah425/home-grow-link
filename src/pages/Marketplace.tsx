@@ -44,7 +44,7 @@ const Marketplace = () => {
         .from("products")
         .select(`
           *,
-          profiles(
+          profiles!products_farmer_id_fkey(
             full_name,
             farmer_details(farm_name, rating)
           )
@@ -78,10 +78,10 @@ const Marketplace = () => {
         className="relative h-[400px] bg-cover bg-center mb-8"
         style={{ backgroundImage: `url(${heroMarketplace})` }}
       >
-        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-          <div className="text-center text-white">
-            <h1 className="text-5xl font-bold mb-4">Fresh Marketplace</h1>
-            <p className="text-xl">Discover farm-fresh produce from local farmers</p>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/30 flex items-center justify-center">
+          <div className="text-center text-white animate-fade-in">
+            <h1 className="text-5xl font-bold mb-4 drop-shadow-lg">Fresh Marketplace</h1>
+            <p className="text-xl drop-shadow-md">Discover farm-fresh produce from local farmers</p>
           </div>
         </div>
       </div>
