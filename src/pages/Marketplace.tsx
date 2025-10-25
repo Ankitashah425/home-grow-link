@@ -19,13 +19,6 @@ interface Product {
   quantity_available: number;
   farmer_id: string;
   organic: boolean;
-  profiles: {
-    full_name: string;
-    farmer_details: {
-      farm_name: string;
-      rating: number;
-    };
-  };
 }
 
 const Marketplace = () => {
@@ -42,25 +35,12 @@ const Marketplace = () => {
     try {
       const { data, error } = await supabase
         .from("products")
-        .select(`
-          *,
-          farmer:profiles!farmer_id(
-            full_name,
-            farmer_details(farm_name, rating)
-          )
-        `)
+        .select("*")
         .eq("is_active", true)
         .gt("quantity_available", 0);
 
       if (error) throw error;
-      
-      // Transform data to match expected structure
-      const transformedData = data?.map(product => ({
-        ...product,
-        profiles: product.farmer
-      })) || [];
-      
-      setProducts(transformedData);
+      setProducts(data || []);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
