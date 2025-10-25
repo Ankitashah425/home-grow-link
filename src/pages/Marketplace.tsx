@@ -44,7 +44,7 @@ const Marketplace = () => {
         .from("products")
         .select(`
           *,
-          profiles!products_farmer_id_fkey(
+          farmer:profiles!farmer_id(
             full_name,
             farmer_details(farm_name, rating)
           )
@@ -53,7 +53,14 @@ const Marketplace = () => {
         .gt("quantity_available", 0);
 
       if (error) throw error;
-      setProducts(data || []);
+      
+      // Transform data to match expected structure
+      const transformedData = data?.map(product => ({
+        ...product,
+        profiles: product.farmer
+      })) || [];
+      
+      setProducts(transformedData);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
