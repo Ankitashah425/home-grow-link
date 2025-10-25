@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CartProvider } from "@/contexts/CartContext";
 import Index from "./pages/Index";
+import Auth from "./pages/Auth";
 import JoinConsumer from "./pages/JoinConsumer";
 import JoinFarmer from "./pages/JoinFarmer";
 import Marketplace from "./pages/Marketplace";
@@ -26,6 +27,7 @@ const App = () => (
           <CartProvider>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
               <Route path="/join/consumer" element={<JoinConsumer />} />
               <Route path="/join/farmer" element={<JoinFarmer />} />
               <Route path="/marketplace" element={<Marketplace />} />
