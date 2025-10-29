@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, Package } from "lucide-react";
+import { SupportTickets } from "@/components/SupportTickets";
 
 interface Product {
   id: string;
@@ -216,9 +217,10 @@ const FarmerDashboard = () => {
           <h1 className="text-4xl font-bold mb-8">Farmer Dashboard</h1>
 
           <Tabs defaultValue="products" className="w-full">
-            <TabsList className="grid w-full max-w-md grid-cols-2 mb-8">
+            <TabsList className="grid w-full max-w-2xl grid-cols-3 mb-8">
               <TabsTrigger value="products">My Products</TabsTrigger>
               <TabsTrigger value="orders">Orders</TabsTrigger>
+              <TabsTrigger value="support">Support</TabsTrigger>
             </TabsList>
 
             <TabsContent value="products">
@@ -428,6 +430,12 @@ const FarmerDashboard = () => {
               ))}
             </div>
           )}
+        </TabsContent>
+
+        <TabsContent value="support">
+          <Card className="p-8">
+            <SupportTickets />
+          </Card>
         </TabsContent>
       </Tabs>
         </div>
