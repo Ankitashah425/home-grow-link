@@ -180,6 +180,34 @@ const FarmerDashboard = () => {
     }
   };
 
+  const toggleProductStock = async (product: Product) => {
+    const { error } = await supabase
+      .from("products")
+      .update({ is_active: !product.is_active })
+      .eq("id", product.id);
+
+    if (error) {
+      toast({ title: "Error updating product status", variant: "destructive" });
+    } else {
+      toast({ title: product.is_active ? "Product marked as out of stock" : "Product marked as available" });
+      fetchProducts();
+    }
+  };
+
+  const updateOrderStatus = async (orderId: string, newStatus: string) => {
+    const { error } = await supabase
+      .from("orders")
+      .update({ status: newStatus as any })
+      .eq("id", orderId);
+
+    if (error) {
+      toast({ title: "Error updating order status", variant: "destructive", description: error.message });
+    } else {
+      toast({ title: "Order status updated successfully" });
+      fetchOrders();
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -314,9 +342,15 @@ const FarmerDashboard = () => {
                   <span className="text-primary font-bold text-lg">₹{product.price}/{product.unit}</span>
                   <span className="text-sm">Stock: {product.quantity_available}</span>
                 </div>
+                <Badge className={product.is_active ? "bg-green-500/10 text-green-500 mb-3" : "bg-red-500/10 text-red-500 mb-3"}>
+                  {product.is_active ? "In Stock" : "Out of Stock"}
+                </Badge>
                 <div className="flex gap-2">
                   <Button variant="outline" size="sm" onClick={() => handleEdit(product)}>
                     <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => toggleProductStock(product)}>
+                    {product.is_active ? "Mark Out of Stock" : "Mark In Stock"}
                   </Button>
                   <Button variant="destructive" size="sm" onClick={() => handleDelete(product.id)}>
                     <Trash2 className="h-4 w-4" />
@@ -339,17 +373,21 @@ const FarmerDashboard = () => {
           ) : (
             <div className="space-y-4">
               {orders.map((item) => (
-                <Card key={item.id} className="p-4">
-                  <div className="flex justify-between items-start">
+                <Card key={item.id} className="p-6">
+                  <div className="flex justify-between items-start mb-4">
                     <div>
                       <div className="flex items-center gap-3 mb-2">
                         <Badge className={
                           item.orders.status === "pending" ? "bg-yellow-500/10 text-yellow-500" :
                           item.orders.status === "confirmed" ? "bg-blue-500/10 text-blue-500" :
+                          item.orders.status === "preparing" ? "bg-purple-500/10 text-purple-500" :
+                          item.orders.status === "ready" ? "bg-cyan-500/10 text-cyan-500" :
+                          item.orders.status === "out_for_delivery" ? "bg-orange-500/10 text-orange-500" :
                           item.orders.status === "delivered" ? "bg-green-500/10 text-green-500" :
+                          item.orders.status === "cancelled" ? "bg-red-500/10 text-red-500" :
                           "bg-gray-500/10 text-gray-500"
                         }>
-                          {item.orders.status.toUpperCase()}
+                          {item.orders.status.replace(/_/g, ' ').toUpperCase()}
                         </Badge>
                         <span className="text-sm text-muted-foreground">
                           {new Date(item.orders.created_at).toLocaleDateString()}
@@ -365,6 +403,26 @@ const FarmerDashboard = () => {
                         ₹{item.price_per_unit} per unit
                       </p>
                     </div>
+                  </div>
+                  <div className="border-t pt-4">
+                    <Label className="mb-2 block">Update Order Status</Label>
+                    <Select 
+                      value={item.orders.status} 
+                      onValueChange={(value) => updateOrderStatus(item.order_id, value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="pending">Pending</SelectItem>
+                        <SelectItem value="confirmed">Confirmed</SelectItem>
+                        <SelectItem value="preparing">Preparing</SelectItem>
+                        <SelectItem value="ready">Ready for Pickup</SelectItem>
+                        <SelectItem value="out_for_delivery">Out for Delivery</SelectItem>
+                        <SelectItem value="delivered">Delivered</SelectItem>
+                        <SelectItem value="cancelled">Cancelled</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </Card>
               ))}

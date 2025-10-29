@@ -39,6 +39,12 @@ const Checkout = () => {
     setLoading(true);
 
     try {
+      // Validate cart items have farmer_id
+      const invalidItems = items.filter(item => !item.farmer_id);
+      if (invalidItems.length > 0) {
+        throw new Error("Some products are missing farmer information. Please refresh and try again.");
+      }
+
       // Create order
       const { data: order, error: orderError } = await supabase
         .from("orders")
@@ -54,7 +60,10 @@ const Checkout = () => {
         .select()
         .single();
 
-      if (orderError) throw orderError;
+      if (orderError) {
+        console.error("Order creation error:", orderError);
+        throw new Error(orderError.message || "Failed to create order");
+      }
 
       // Create order items
       const orderItems = items.map((item) => ({
@@ -70,19 +79,23 @@ const Checkout = () => {
         .from("order_items")
         .insert(orderItems);
 
-      if (itemsError) throw itemsError;
+      if (itemsError) {
+        console.error("Order items error:", itemsError);
+        throw new Error(itemsError.message || "Failed to add items to order");
+      }
 
       toast({
         title: "Order placed successfully!",
-        description: "Your order has been confirmed and will be delivered soon.",
+        description: "Your order has been sent to the farmers for confirmation.",
       });
 
       clearCart();
       navigate("/consumer-dashboard");
     } catch (error: any) {
+      console.error("Checkout error:", error);
       toast({
         title: "Error placing order",
-        description: error.message,
+        description: error.message || "Something went wrong. Please try again.",
         variant: "destructive",
       });
     } finally {
