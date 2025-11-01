@@ -24,12 +24,12 @@ export const Navbar = () => {
           <Link to="/marketplace" className="text-foreground hover:text-primary transition-colors">
             Marketplace
           </Link>
-          <Link to="/farmers" className="text-foreground hover:text-primary transition-colors">
+          <a href="/#farmers" className="text-foreground hover:text-primary transition-colors">
             Our Farmers
-          </Link>
-          <Link to="/how-it-works" className="text-foreground hover:text-primary transition-colors">
+          </a>
+          <a href="/#how-it-works" className="text-foreground hover:text-primary transition-colors">
             How It Works
-          </Link>
+          </a>
         </div>
 
         <div className="flex items-center gap-3">
