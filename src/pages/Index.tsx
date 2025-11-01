@@ -21,10 +21,10 @@ const Index = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-2xl text-white">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-              Fresh From Farm to Your Home
+              Become Part of the Farm-to-Table Revolution
             </h1>
             <p className="text-xl mb-8 text-white/90">
-              Connect directly with local farmers and enjoy the freshest organic produce delivered to your doorstep.
+              Join a thriving community connecting local farmers with conscious consumers. Experience authentic, farm-fresh produce while supporting sustainable agriculture and empowering rural communities.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link to="/marketplace">
