@@ -2,54 +2,57 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/Navbar";
 import { ArrowRight, Leaf, TruckIcon, ShieldCheck, Star } from "lucide-react";
-import heroImage from "@/assets/bg-farm-field.jpg";
+import { Scene3D } from "@/components/Scene3D";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
-      <Navbar />
-      
-      {/* Hero Section */}
-      <section className="relative h-[600px] flex items-center">
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
+    <div className="min-h-screen relative">
+      {/* Full-page dynamic background */}
+      <div className="fixed inset-0 bg-gradient-to-br from-emerald-50 via-green-50 to-lime-50 dark:from-emerald-950 dark:via-green-950 dark:to-lime-950">
+        <div className="absolute inset-0 opacity-30">
+          <Scene3D />
         </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
+      </div>
+
+      {/* Content wrapper */}
+      <div className="relative z-10">
+        <Navbar />
         
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-2xl text-white">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-              Become Part of the Farm-to-Table Revolution
-            </h1>
-            <p className="text-xl mb-8 text-white/90">
-              Join a thriving community connecting local farmers with conscious consumers. Experience authentic, farm-fresh produce while supporting sustainable agriculture and empowering rural communities.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link to="/marketplace">
-                <Button size="lg" className="bg-primary hover:bg-primary/90 text-white shadow-lg">
-                  Browse Marketplace
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link to="/join/consumer">
-                <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm border-white text-white hover:bg-white/20">
-                  Join as Consumer
-                </Button>
-              </Link>
-              <Link to="/join/farmer">
-                <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm border-white text-white hover:bg-white/20">
-                  Join as Farmer
-                </Button>
-              </Link>
+        {/* Hero Section */}
+        <section className="relative min-h-[600px] flex items-center py-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-2xl">
+              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight bg-gradient-to-r from-primary via-emerald-600 to-green-600 bg-clip-text text-transparent">
+                Fresh From Farm to Home
+              </h1>
+              <p className="text-xl mb-8 text-foreground/80">
+                Experience authentic, farm-fresh produce delivered directly to your doorstep. Supporting sustainable agriculture and empowering rural communities.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link to="/marketplace">
+                  <Button size="lg" className="shadow-lg hover:shadow-xl transition-shadow">
+                    Browse Marketplace
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+                <Link to="/join/consumer">
+                  <Button size="lg" variant="outline" className="backdrop-blur-sm hover:bg-primary/10">
+                    Join as Consumer
+                  </Button>
+                </Link>
+                <Link to="/join/farmer">
+                  <Button size="lg" variant="outline" className="backdrop-blur-sm hover:bg-primary/10">
+                    Join as Farmer
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-muted/30">
+        {/* Features Section */}
+        <section className="py-20 bg-background/80 backdrop-blur-sm">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-foreground mb-4">Why Choose AgriConnect?</h2>
@@ -102,8 +105,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-accent/5">
+        {/* CTA Section */}
+        <section className="py-20 bg-background/90 backdrop-blur-sm">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold text-foreground mb-6">
             Ready to Experience Farm-Fresh Living?
@@ -120,8 +123,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-card border-t border-border py-12">
+        {/* Footer */}
+        <footer className="bg-card/95 backdrop-blur-sm border-t border-border py-12">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
@@ -157,8 +160,9 @@ const Index = () => {
           <div className="mt-8 pt-8 border-t border-border text-center text-sm text-muted-foreground">
             <p>&copy; 2025 AgriConnect. All rights reserved.</p>
           </div>
-        </div>
-      </footer>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 };
