@@ -1,11 +1,27 @@
 import { useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Sphere } from "@react-three/drei";
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
+import tomatoImg from "@/assets/tomato.png";
+import carrotImg from "@/assets/carrot.png";
+import appleImg from "@/assets/apple.png";
+import lettuceImg from "@/assets/lettuce.png";
+import pumpkinImg from "@/assets/pumpkin.png";
+import broccoliImg from "@/assets/broccoli.png";
+import pepperImg from "@/assets/pepper.png";
 
-// Tomato - Red sphere
-function Tomato({ position }: { position: [number, number, number] }) {
+// Floating Image Component
+function FloatingImage({ 
+  position, 
+  imageSrc, 
+  scale = 1 
+}: { 
+  position: [number, number, number]; 
+  imageSrc: string; 
+  scale?: number;
+}) {
   const meshRef = useRef<THREE.Mesh>(null);
+  const texture = useLoader(THREE.TextureLoader, imageSrc);
   
   useFrame((state) => {
     if (meshRef.current) {
@@ -15,87 +31,9 @@ function Tomato({ position }: { position: [number, number, number] }) {
   });
 
   return (
-    <Sphere ref={meshRef} position={position} args={[0.4, 32, 32]}>
-      <meshStandardMaterial color="#ef4444" metalness={0.2} roughness={0.3} />
-    </Sphere>
-  );
-}
-
-// Carrot - Orange elongated shape
-function Carrot({ position }: { position: [number, number, number] }) {
-  const groupRef = useRef<THREE.Group>(null);
-  
-  useFrame((state) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.z += 0.015;
-      groupRef.current.position.y = position[1] + Math.cos(state.clock.elapsedTime + position[0]) * 0.25;
-    }
-  });
-
-  return (
-    <group ref={groupRef} position={position}>
-      <mesh rotation={[0, 0, Math.PI / 6]}>
-        <coneGeometry args={[0.2, 0.8, 16]} />
-        <meshStandardMaterial color="#f97316" metalness={0.1} roughness={0.5} />
-      </mesh>
-    </group>
-  );
-}
-
-// Apple - Red/Green sphere with slight indent
-function Apple({ position, color }: { position: [number, number, number], color: string }) {
-  const meshRef = useRef<THREE.Mesh>(null);
-  
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x += 0.008;
-      meshRef.current.rotation.y += 0.012;
-      meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 0.9 + position[0]) * 0.28;
-    }
-  });
-
-  return (
-    <Sphere ref={meshRef} position={position} args={[0.45, 32, 32]}>
-      <meshStandardMaterial color={color} metalness={0.3} roughness={0.4} />
-    </Sphere>
-  );
-}
-
-// Lettuce - Green layered sphere
-function Lettuce({ position }: { position: [number, number, number] }) {
-  const groupRef = useRef<THREE.Group>(null);
-  
-  useFrame((state) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y += 0.01;
-      groupRef.current.position.y = position[1] + Math.cos(state.clock.elapsedTime * 1.2 + position[0]) * 0.2;
-    }
-  });
-
-  return (
-    <group ref={groupRef} position={position}>
-      <Sphere args={[0.4, 16, 16]}>
-        <meshStandardMaterial color="#22c55e" metalness={0.1} roughness={0.7} />
-      </Sphere>
-    </group>
-  );
-}
-
-// Pumpkin - Orange squashed sphere
-function Pumpkin({ position }: { position: [number, number, number] }) {
-  const meshRef = useRef<THREE.Mesh>(null);
-  
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += 0.008;
-      meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 0.7 + position[0]) * 0.25;
-    }
-  });
-
-  return (
-    <mesh ref={meshRef} position={position} scale={[1, 0.7, 1]}>
-      <sphereGeometry args={[0.5, 32, 32]} />
-      <meshStandardMaterial color="#fb923c" metalness={0.2} roughness={0.5} />
+    <mesh ref={meshRef} position={position}>
+      <planeGeometry args={[scale, scale]} />
+      <meshBasicMaterial map={texture} transparent side={THREE.DoubleSide} />
     </mesh>
   );
 }
@@ -106,21 +44,19 @@ export function Scene3D() {
       camera={{ position: [0, 0, 8], fov: 50 }}
       style={{ background: 'transparent' }}
     >
-      <ambientLight intensity={0.7} />
-      <directionalLight position={[10, 10, 5]} intensity={1.2} />
-      <pointLight position={[-10, -10, -5]} intensity={0.6} color="#4ade80" />
-      <pointLight position={[10, -5, -3]} intensity={0.4} color="#fbbf24" />
+      <ambientLight intensity={0.8} />
+      <directionalLight position={[10, 10, 5]} intensity={1} />
       
       {/* Floating fruits and vegetables */}
-      <Tomato position={[-3, 2, 0]} />
-      <Apple position={[3, -1, -2]} color="#ef4444" />
-      <Carrot position={[-2, -2, 1]} />
-      <Lettuce position={[4, 1, -1]} />
-      <Pumpkin position={[0, 0, 0]} />
-      <Apple position={[-4, 0, -3]} color="#22c55e" />
-      <Tomato position={[2, 2, -2]} />
-      <Carrot position={[-1, 1, 2]} />
-      <Lettuce position={[3, -2, 1]} />
+      <FloatingImage position={[-3, 2, 0]} imageSrc={tomatoImg} scale={1.2} />
+      <FloatingImage position={[3, -1, -2]} imageSrc={appleImg} scale={1.3} />
+      <FloatingImage position={[-2, -2, 1]} imageSrc={carrotImg} scale={1.4} />
+      <FloatingImage position={[4, 1, -1]} imageSrc={lettuceImg} scale={1.5} />
+      <FloatingImage position={[0, 0, 0]} imageSrc={pumpkinImg} scale={1.6} />
+      <FloatingImage position={[-4, 0, -3]} imageSrc={broccoliImg} scale={1.2} />
+      <FloatingImage position={[2, 2, -2]} imageSrc={pepperImg} scale={1.1} />
+      <FloatingImage position={[-1, 1, 2]} imageSrc={tomatoImg} scale={1} />
+      <FloatingImage position={[3, -2, 1]} imageSrc={carrotImg} scale={1.3} />
       
       <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.5} />
     </Canvas>
