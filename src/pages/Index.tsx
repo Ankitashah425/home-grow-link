@@ -2,28 +2,27 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/Navbar";
 import { ArrowRight, Leaf, TruckIcon, ShieldCheck, Star, Sprout } from "lucide-react";
-import { Scene3D } from "@/components/Scene3D";
 
 const Index = () => {
   return (
     <div className="min-h-screen relative">
-      {/* Full-page dynamic background with farm pattern */}
-      <div className="fixed inset-0 bg-gradient-to-br from-emerald-50 via-green-50 to-lime-50 dark:from-emerald-950 dark:via-green-950 dark:to-lime-950">
-        {/* Farm field pattern overlay */}
-        <div className="absolute inset-0 opacity-5" style={{
-          backgroundImage: `repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 50px,
-            rgba(16, 185, 129, 0.1) 50px,
-            rgba(16, 185, 129, 0.1) 52px
-          )`
+      {/* Smooth pastel gradient background inspired by nature */}
+      <div className="fixed inset-0" style={{
+        background: 'var(--gradient-nature)'
+      }}>
+        {/* Subtle texture overlay for depth */}
+        <div className="absolute inset-0 opacity-20" style={{
+          backgroundImage: `radial-gradient(circle at 20% 50%, rgba(142, 202, 150, 0.1) 0%, transparent 50%),
+                           radial-gradient(circle at 80% 80%, rgba(255, 245, 220, 0.15) 0%, transparent 50%),
+                           radial-gradient(circle at 40% 20%, rgba(142, 202, 150, 0.08) 0%, transparent 50%)`
         }} />
-        <div className="absolute inset-0 opacity-30">
-          <Scene3D />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
       </div>
+      
+      <style dangerouslySetInnerHTML={{__html: `
+        .dark .fixed.inset-0 {
+          background: var(--gradient-nature-dark) !important;
+        }
+      `}} />
 
       {/* Content wrapper */}
       <div className="relative z-10">
