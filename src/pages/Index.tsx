@@ -4,6 +4,7 @@ import { Navbar } from "@/components/Navbar";
 import { ArrowRight, Leaf, TruckIcon, ShieldCheck, Star, Sprout } from "lucide-react";
 import { FloatingElements } from "@/components/FloatingElements";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import heroFarmFresh from "@/assets/hero-farm-fresh.jpg";
 
 const Index = () => {
   const howItWorksSection = useScrollAnimation();
@@ -37,8 +38,17 @@ const Index = () => {
         <Navbar />
         
         {/* Hero Section - Enhanced */}
-        <section className="relative min-h-[650px] flex items-center py-20">
-          <div className="container mx-auto px-4">
+        <section className="relative min-h-[650px] flex items-center py-20 overflow-hidden">
+          {/* Background Image */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${heroFarmFresh})` }}
+          >
+            {/* Gradient Overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/85 to-background/50" />
+          </div>
+          
+          <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-3xl">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 backdrop-blur-sm mb-6 animate-fade-in">
                 <Leaf className="h-4 w-4 text-primary" />
